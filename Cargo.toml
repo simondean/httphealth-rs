@@ -1,9 +1,13 @@
 [package]
 name = "httphealth"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 keywords = ["health", "check", "healthcheck", "http"]
 categories = ["command-line-utilities", "development-tools"]
+include = [
+    "src/main.rs",
+    "README.md",
+]
 
 [dependencies]
 reqwest = { version = "0.12.23" }
