@@ -1,9 +1,7 @@
-use reqwest::Client;
 use std::env;
 use std::process;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect::<Vec<String>>();
 
     if args.len() < 2 {
@@ -19,9 +17,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         200
     };
 
-    let client = Client::new();
     println!("Calling GET {}", url);
-    let response = client.get(url).send().await?;
+    let response = ureq::get(url).call()?;
     let actual_status_code = response.status().as_u16();
 
     if actual_status_code == status_code {
