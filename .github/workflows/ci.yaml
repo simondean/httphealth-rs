@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - '**/.idea/**'
+
+jobs:
+
+  ci-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        # Based on https://axion-release-plugin.readthedocs.io/en/latest/configuration/ci_servers/#github-actions
+        with:
+          fetch-depth: 0
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy,rustfmt
+
+      - name: Set up Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --release --locked
+
+      - name: Test
+        run: cargo test --release --locked --all
+
+      - name: Lint
+        run: cargo clippy -- -D warnings
+
+      - name: Check Formatting
+        run: cargo fmt --all -- --check
